@@ -13,20 +13,20 @@ class Register extends Controller{
 			'categorys'=>$categorys,
 		]);
 	}
+	
 	public function add(){
 		if(!request()->isPost()){
 			$this->error("请求错误");
 		}
 		//获取表单的值
 		$data=input("post.");
-		print_r($data);
-		exit;
+		
 		//校验数据
 		$validate=validate('Bis');
 		if(!$validate->scene('add')->check($data)){
 			$this->error($validate->getError());
 		}
-		print_r($data);exit;
+		
 		//商户信息
 		$bisData=[
 			'name'=>$data['name'],
@@ -42,21 +42,22 @@ class Register extends Controller{
 			'faren'=>$data['faren'],
 			'faren_tel'=>$data['faren_tel'],
 		];
+		/*
 		$res=model('Bis')->add($bisData);
 		if($res){
 			$this->success("新增成功");
 		}else{
 			$this->error("新增失败");
 		}
-		
+		*/
 		//商户总店信息
 		$lngLat_result=\Map::getLngLat($data['address']);//获取经纬度信息
 		
-		foreach($data['se_category_id'] as $value){
+		foreach($data['se_category_id'] as $value){//二级分类信息
 			$category_path=$value."|";
 		}
 		
-		$bisDataLocation=[
+		$bisLocationData=[
 			'name'=>$data['name'],
 			'logo'=>$data['logo'],
 			'address'=>$data['address'],
@@ -74,19 +75,32 @@ class Register extends Controller{
 			'category_path'=>$category_path,
 			'bank_info'=>$data['bank_info'],
 		];
-		$res=model('Bislocation')->add($bisDataLocation);
+		/*
+		//$res=model('Bislocation')->add($bisLocationData);
 		if($res){
 			$this->success("新增成功");
 		}else{
 			$this->error("新增失败");
 		}
 		
-		
-		foreach(){
-		
+		*/
+		$code=mt_rand(10000,99999);
+		$passwd=md5($data['password'].$code);
+		$bisUserData=[
+			'username'=>$data['username'],
+			'password'=>$passwd,
+			'code'=>$code,
+			'last_login_ip'=>$_SERVER['REMOTE_ADDR'],
+			'last_login_time'=>$_SERVER['REQUEST_TIME'],
+			'email'=>$data['email'],
+			'mobile'=>$data['contact'],
+		];
+		$res=model('Bisuser')->add($bisUserData);
+		if($res){
+			$this->success("新增成功");
+		}else{
+			$this->error("新增失败");
 		}
-		
-		
 	}
 }
 
