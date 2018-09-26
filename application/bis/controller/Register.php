@@ -22,7 +22,15 @@ class Register extends Controller{
 		$data=input("post.");
 		
 		//校验数据
-		$validate=validate('Bis');
+		$validate=validate('Bis');//使用助手函数实例化验证器
+		if(!$validate->scene('add')->check($data)){
+			$this->error($validate->getError());
+		}
+		$validate=validate('BisLocation');//使用助手函数实例化验证器
+		if(!$validate->scene('add')->check($data)){
+			$this->error($validate->getError());
+		}
+		$validate=validate('User');//使用助手函数实例化验证器
 		if(!$validate->scene('add')->check($data)){
 			$this->error($validate->getError());
 		}
@@ -42,16 +50,14 @@ class Register extends Controller{
 			'faren'=>$data['faren'],
 			'faren_tel'=>$data['faren_tel'],
 		];
-		/*
+		print_r($bisData);
+		
 		$res=model('Bis')->add($bisData);
-		if($res){
-			$this->success("新增成功");
-		}else{
-			$this->error("新增失败");
-		}
-		*/
+		
+		
 		//商户总店信息
-		$lngLat_result=\Map::getLngLat($data['address']);//获取经纬度信息
+		$lngLat_result=json_decode(\Map::getLngLat($data['address']));//获取经纬度信息
+		
 		
 		foreach($data['se_category_id'] as $value){//二级分类信息
 			$category_path=$value."|";
@@ -75,15 +81,12 @@ class Register extends Controller{
 			'category_path'=>$category_path,
 			'bank_info'=>$data['bank_info'],
 		];
-		/*
-		//$res=model('Bislocation')->add($bisLocationData);
-		if($res){
-			$this->success("新增成功");
-		}else{
-			$this->error("新增失败");
-		}
+		print_r($bisLocationData);
 		
-		*/
+		$res=model('BisLocation')->add($bisLocationData);
+		
+		
+		
 		$code=mt_rand(10000,99999);
 		$passwd=md5($data['password'].$code);
 		$bisUserData=[
@@ -93,14 +96,17 @@ class Register extends Controller{
 			'last_login_ip'=>$_SERVER['REMOTE_ADDR'],
 			'last_login_time'=>$_SERVER['REQUEST_TIME'],
 			'email'=>$data['email'],
-			'mobile'=>$data['contact'],
+			'mobile'=>$data['tel'],
 		];
-		$res=model('Bisuser')->add($bisUserData);
+		print_r($bisUserData);
+		
+		$res=model('User')->add($bisUserData);
 		if($res){
-			$this->success("新增成功");
+			$this->success("新增成功3");
 		}else{
 			$this->error("新增失败");
 		}
+		
 	}
 }
 

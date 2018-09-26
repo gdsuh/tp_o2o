@@ -1,8 +1,8 @@
 <?php
-namespace app/common/model;
-use think/Model;
+namespace app\common\model;
+use think\Model;
 
-class BisUser{
+class User extends Model{
 	protected $autoWriteTimestamp = true;
 	
 	public function add($data){
