@@ -6,7 +6,9 @@ use think\Model;
 class BisLocation extends Model{
 	protected $autoWriteTimestamp = true;
 	public function add($data){
-		return $this->save($data);
+		$data['status']=0;
+		$this->save($data);
+		return $this->id;
 	}
 }
 

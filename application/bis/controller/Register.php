@@ -21,6 +21,11 @@ class Register extends Controller{
 		//获取表单的值
 		$data=input("post.");
 		
+		$validate=validate('Register');//使用助手函数实例化验证器
+		if(!$validate->check($data)){
+			$this->error($validate->getError());
+		}
+		/*
 		//校验数据
 		$validate=validate('Bis');//使用助手函数实例化验证器
 		if(!$validate->scene('add')->check($data)){
@@ -33,7 +38,7 @@ class Register extends Controller{
 		$validate=validate('User');//使用助手函数实例化验证器
 		if(!$validate->scene('add')->check($data)){
 			$this->error($validate->getError());
-		}
+		}*/
 		
 		//商户信息
 		$bisData=[
@@ -43,7 +48,7 @@ class Register extends Controller{
 			'licence_logo'=>$data['licence_logo'],
 			'description'=>$data['description'],
 			'city_id'=>$data['city_id'],
-			'city_path'=>$data['city_id'].",".$data['se_city_id'],
+			'city_path'=>empty($data['se_city_id'])?$data['city_id']:$data['city_id'].','.$data['se_city_id'],
 			'bank_info'=>$data['bank_info'],
 			'bank_user'=>$data['bank_user'],
 			'bank_name'=>$data['bank_name'],
@@ -52,15 +57,18 @@ class Register extends Controller{
 		];
 		print_r($bisData);
 		
-		$res=model('Bis')->add($bisData);
+		$bisId=model('Bis')->add($bisData);
 		
 		
 		//商户总店信息
 		$lngLat_result=json_decode(\Map::getLngLat($data['address']));//获取经纬度信息
 		
 		
-		foreach($data['se_category_id'] as $value){//二级分类信息
-			$category_path=$value."|";
+		
+		if(!empty($data['se_category_id'])){
+			$data['cat']=implode("|",$data['se_category_id']);
+		}else{
+			$data['cat']='';
 		}
 		
 		$bisLocationData=[
@@ -69,30 +77,31 @@ class Register extends Controller{
 			'address'=>$data['address'],
 			'tel'=>$data['tel'],
 			'contact'=>$data['contact'],
-			'xpoint'=>$lngLat_result->result->location->lng,
-			'ypoint'=>$lngLat_result->result->location->lat,
-			'bis_id'=>'',
+			'xpoint'=>empty($lngLat_result->result->location->lng)?'':$lngLat_result->result->location->lng,
+			'ypoint'=>empty($lngLat_result->result->location->lat)?'':$lngLat_result->result->location->lat,
+			'bis_id'=>$bisId,
 			'open_time'=>$data['open_time'],
 			'content'=>empty($data['content'])?"":$data['content'],
-			'is_main'=>1,
+			'is_main'=>1,//表示总店信息
 			'city_id'=>$data['city_id'],
-			'city_path'=>$data['city_id'].",".$data['se_city_id'],
+			'city_path'=>empty($data['se_city_id'])?$data['city_id']:$data['city_id'].','.$data['se_city_id'],
 			'category_id'=>$data['category_id'],
-			'category_path'=>$category_path,
+			'category_path'=>$data['category_id'].",".$data['cat'],
 			'bank_info'=>$data['bank_info'],
 		];
 		print_r($bisLocationData);
 		
-		$res=model('BisLocation')->add($bisLocationData);
+		$bisLocationId=model('BisLocation')->add($bisLocationData);
 		
 		
 		
-		$code=mt_rand(10000,99999);
-		$passwd=md5($data['password'].$code);
+		$data['code']=mt_rand(10000,99999);
 		$bisUserData=[
+			'bis_id'=>$bisId,
 			'username'=>$data['username'],
-			'password'=>$passwd,
-			'code'=>$code,
+			'password'=>md5($data['password'].$data['code']),
+			'code'=>$data['code'],
+			'is_main'=>1,//代表总管理员
 			'last_login_ip'=>$_SERVER['REMOTE_ADDR'],
 			'last_login_time'=>$_SERVER['REQUEST_TIME'],
 			'email'=>$data['email'],
