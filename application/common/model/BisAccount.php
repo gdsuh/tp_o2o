@@ -3,7 +3,7 @@ namespace app\common\model;
 
 use think\Model;
 
-class BisLocation extends BaseModel{
+class BisAccount extends BaseModel{
 	
 }
 

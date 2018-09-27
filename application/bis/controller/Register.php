@@ -22,9 +22,10 @@ class Register extends Controller{
 		$data=input("post.");
 		
 		$validate=validate('Register');//使用助手函数实例化验证器
-		if(!$validate->check($data)){
+		if(!$validate->scene('filter')->check($data)){
 			$this->error($validate->getError());
 		}
+		print_r($data);
 		/*
 		//校验数据
 		$validate=validate('Bis');//使用助手函数实例化验证器
@@ -45,7 +46,7 @@ class Register extends Controller{
 			'name'=>$data['name'],
 			'email'=>$data['email'],
 			'logo'=>$data['logo'],
-			'licence_logo'=>$data['licence_logo'],
+			'licence_logo'=>$data['license_logo'],
 			'description'=>$data['description'],
 			'city_id'=>$data['city_id'],
 			'city_path'=>empty($data['se_city_id'])?$data['city_id']:$data['city_id'].','.$data['se_city_id'],
@@ -96,7 +97,7 @@ class Register extends Controller{
 		
 		
 		$data['code']=mt_rand(10000,99999);
-		$bisUserData=[
+		$bisAccountData=[
 			'bis_id'=>$bisId,
 			'username'=>$data['username'],
 			'password'=>md5($data['password'].$data['code']),
@@ -104,18 +105,34 @@ class Register extends Controller{
 			'is_main'=>1,//代表总管理员
 			'last_login_ip'=>$_SERVER['REMOTE_ADDR'],
 			'last_login_time'=>$_SERVER['REQUEST_TIME'],
-			'email'=>$data['email'],
-			'mobile'=>$data['tel'],
 		];
-		print_r($bisUserData);
+		print_r($bisAccountData);
 		
-		$res=model('User')->add($bisUserData);
-		if($res){
-			$this->success("新增成功3");
+		$bisAccountId=model('BisAccount')->add($bisAccountData);
+		if(empty($bisAccountId)){
+			$this->error("申请失败");
+		}
+		if($bisId&&$bisLocationId&&$bisAccountId){
+			//发送邮件
+			$url=request()->domain().url('bis/register/waiting',['id'=>$bisId]);
+			$title="o2o入驻申请邮件通知";
+			$content="您提交的入驻申请需提交平台方审核通过,点击链接<a href='".$url."' target='_blank'>查看审核进度</a>";
+			\phpmailer\Email::send($data['email'],$title,$content);
+			$this->success("申请成功",url('register/waiting',['id'=>$bisId]));
 		}else{
-			$this->error("新增失败");
+			$this->error("申请失败");
 		}
 		
+	}
+	public function waiting($id){
+		if(empty($id)){
+			$this->error();
+		}
+		$detail=model('Bis')->get($id);
+		
+		return $this->fetch('',[
+			'detail'=>$detail,
+		]);
 	}
 }
 

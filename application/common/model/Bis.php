@@ -1,13 +1,20 @@
 <?php
 namespace app\common\model;
 use think\Model;
-class Bis extends Model{
-	protected $autoWriteTimestamp = true;
+class Bis extends BaseModel{
+	public function getBisByStatus($status=0){
+		$order=[
+			'id'=>'desc',
+		];
+		$data=[
+			'status'=>$status,
+		];
+		$result=$this->where($data)->order($order)->select();
+		return $result;
+	}
 	
-	public function add($data){
-		$data['status']=1;//Ĭ��״̬Ϊ1
-		$this->save($data);
-		return $this->id;
+	public function edit($id){
+		
 	}
 }
 

@@ -44,7 +44,18 @@ function doCurl($url,$type=0,$data=[]){
 }
 
 
-
+function bisRegister($status){
+	if($status == 1){
+		$str="入驻申请成功";
+	}else if($status == 0){
+		$str="待审核";
+	}else if($status == 2){
+		$str="入驻申请失败";
+	}else{
+		$str="该申请不存在";
+	}
+	return $str;
+}
 
 
 

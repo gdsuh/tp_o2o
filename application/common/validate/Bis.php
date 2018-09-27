@@ -8,7 +8,7 @@ class Bis extends Validate{
 		'name'=>'require|min:2|max:25',
 		'email'=>'email',
 		'logo'=>'require',
-		'license_logo'=>'require',
+		'licence_logo'=>'require',
 		'description'=>'require',
 		'city_id'=>'require|number',
 		'city_path'=>'require',
@@ -24,7 +24,7 @@ class Bis extends Validate{
 		'name'=>'商户名不能为空且不能过于简短或超过25个字符',
 		'email'=>'邮箱格式不正确',
 		'logo'=>'商户缩略图不能为空',
-		'license_logo'=>'商户营业执照不能为空',
+		'licence_logo'=>'商户营业执照不能为空',
 		'description'=>'商户介绍不能为空',
 		'city_id'=>'请选择所属城市',
 		'city_path'=>'请选择所属城市',
@@ -40,7 +40,7 @@ class Bis extends Validate{
 	场景设置
 	*/
 	protected $scene = [
-		'add'=>['name','email','logo','license_logo','city_id','city_path','bank_info','bank_name','bank_user','faren','faren_tel'
+		'add'=>['name','email','logo','licence_logo','city_id','city_path','bank_info','bank_name','bank_user','faren','faren_tel'
 		],
 	];
 }

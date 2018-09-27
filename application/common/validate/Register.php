@@ -9,7 +9,7 @@ class Register extends Validate{
 		'city_id'=>'require|number',
 		'se_city_id'=>'require|number',
 		'logo'=>'require',
-		'license_logo'=>'require',
+		'licence_logo'=>'require',
 		'description'=>'require',
 		'bank_info'=>'require',
 		'bank_name'=>'require',
@@ -30,7 +30,7 @@ class Register extends Validate{
 		'city_id'=>'请选择所属城市',
 		'se_city_id'=>'请选择所属二级城市',
 		'logo'=>'商户缩略图不能为空',
-		'license_logo'=>'商户营业执照不能为空',
+		'licence_logo'=>'商户营业执照不能为空',
 		'description'=>'商户介绍不能为空',
 		'bank_info'=>'银行账户不能为空',
 		'bank_name'=>'开户行名称不能为空',
@@ -48,7 +48,8 @@ class Register extends Validate{
 	];
 	protected $scene = [
 		'filter'=>[
-			
+			'name','bank_info','bank_name','bank_user','faren','faren_tel',
+			'email','contact','tel','category_id','address','open_time','username','password'
 		],
 	];
 }
