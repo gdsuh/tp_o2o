@@ -76,7 +76,8 @@ class Category extends Controller{
 		
 		$res=$this->obj->save(['status'=>$data['status']],['id'=>$data['id']]);//将$data提交到model层
 		if($res){
-			$this->success("状态更新成功");
+			//$this->success("状态更新成功");
+            print($this->obj->getLastSql());
 		}else{
 			$this->error("状态更新失败");
 		}

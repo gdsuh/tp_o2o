@@ -58,7 +58,26 @@ function bisRegister($status){
 }
 
 
-
+function getSeCityName($path){
+    if(empty($path)){
+        return "";
+    }else{
+        if(preg_match("/,/i",$path)){
+          $cityPath=explode(",",$path);
+          if(!empty($cityPath[1])){
+              $id = $cityPath[1];
+          }else{
+              $id = $cityPath[0];
+          }
+        }else if(is_int($path)){
+            $id = $path;
+        }else{
+            return "";
+        }
+        $data=model('city')->field('name')->find(['id'=>$id]);
+        return $data['name'];
+    }
+}
 
 
 

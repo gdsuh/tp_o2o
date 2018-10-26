@@ -4,10 +4,8 @@ namespace app\bis\controller;
 use think\Controller;
 class Register extends Controller{
 	public function index(){
-		
-		//获取一级城市的数据
-		$citys=model('City')->getNormalCityByParentId();
-		$categorys=model('Category')->getFirstCategory();
+		$citys=model('City')->getNormalCityByParentId();//获取一级城市的数据
+		$categorys=model('Category')->getCategoryByParentId();
 		return $this->fetch('',[
 			'citys'=>$citys,
 			'categorys'=>$categorys,
@@ -46,7 +44,7 @@ class Register extends Controller{
 			'name'=>$data['name'],
 			'email'=>$data['email'],
 			'logo'=>$data['logo'],
-			'licence_logo'=>$data['license_logo'],
+			'license_logo'=>$data['license_logo'],
 			'description'=>$data['description'],
 			'city_id'=>$data['city_id'],
 			'city_path'=>empty($data['se_city_id'])?$data['city_id']:$data['city_id'].','.$data['se_city_id'],
@@ -87,7 +85,7 @@ class Register extends Controller{
 			'city_id'=>$data['city_id'],
 			'city_path'=>empty($data['se_city_id'])?$data['city_id']:$data['city_id'].','.$data['se_city_id'],
 			'category_id'=>$data['category_id'],
-			'category_path'=>$data['category_id'].",".$data['cat'],
+			'category_path'=>$data['cat'],
 			'bank_info'=>$data['bank_info'],
 		];
 		print_r($bisLocationData);
