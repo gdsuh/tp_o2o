@@ -10,7 +10,7 @@ class Category extends Controller{
 	}
 	public function index(){
 		$parentId=input("param.parent_id",0,'intval');//第二个参数为默认值
-		$categorys=$this->obj->getFirstCategory($parentId);//根据相应的parentId拿到对应记录，默认为0
+		$categorys=$this->obj->getCategoryByParentId($parentId);//根据相应的parentId拿到对应记录，默认为0
 		return $this->fetch('',['categorys'=>$categorys]);//返回index模板文件
 	}
 	public function add(){
@@ -77,7 +77,7 @@ class Category extends Controller{
 		$res=$this->obj->save(['status'=>$data['status']],['id'=>$data['id']]);//将$data提交到model层
 		if($res){
 			//$this->success("状态更新成功");
-            print($this->obj->getLastSql());
+            //print($this->obj->getLastSql());
 		}else{
 			$this->error("状态更新失败");
 		}

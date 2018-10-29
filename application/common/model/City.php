@@ -3,6 +3,8 @@ namespace app\common\model;
 
 use think\Model;
 class City extends Model{
+    protected  $autoWriteTimestamp = true;
+
     /**
      * 根据省份id获取该省份包含的城市
      * @param int $parentId  省份id
@@ -11,18 +13,30 @@ class City extends Model{
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-	public function getNormalCityByParentId($parentId=0){
+	public function getNormalCityByParentId($parentId=0,$field=''){
 		$data=[
-			'status'=>1,
 			'parent_id'=>$parentId,
 		];
 		
 		$order=[
-			'id'=>'desc',
+			'listorder'=>'desc',
 		];
 		
-		return $this->where($data)->order($order)->select();
+		return $this->field($field)->where($data)->order($order)->select();
 	}
+
+    public function getCityById($id=0,$field=''){
+        $data=[
+            'status'=>1,
+            'id'=>$id,
+        ];
+
+        $order=[
+            'listorder'=>'desc',
+        ];
+
+        return $this->field($field)->where($data)->order($order)->select();
+    }
 }
 
 
