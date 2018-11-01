@@ -18,7 +18,7 @@ class Bis extends Validate{
 		'bank_user'=>'require',
 		'faren'=>'require',
 		'faren_tel'=>'require|number',
-		'status'=>'number|in:-1,0,1',
+		'status'=>'number|in:-1,0,1,2',
 	];
 	protected $message = [
 		'name'=>'商户名不能为空且不能过于简短或超过25个字符',

@@ -8,13 +8,14 @@ class Bis extends Controller{
 	public function _initialize(){
 		$this->obj=model("Bis");
 	}
-	public function apply(){
-		$data=$this->obj->getBisByStatus();
-		//print_r($data);
-		return $this->fetch('',[
-			'bis'=>$data
-		]);
-	}
+
+	public function index(){
+	    $status=input('param.s');
+	    $bisData=$this->obj->getBisByStatus('id,name,faren,faren_tel,status,create_time',$status);
+	    return $this->fetch('bis/apply',['bisData'=>$bisData]);
+    }
+
+
 	public function detail(){
 	    //获取参数
         $id=input("param.id");
