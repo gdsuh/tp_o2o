@@ -21,6 +21,14 @@ function status($status){
 	return $str;
 }
 
+function main($main){
+    if($main==1){
+        $str="<span class='label label-success radius'>总店</span>";
+    }else{
+        $str="<span class='label label-success radius'>分店</span>";
+    }
+    return $str;
+}
 /**
 *type=0 get;1 post
 */
