@@ -19,7 +19,9 @@ class Location extends Base{
 
     }
     public function index(){
-        $locationData=model('BisLocation')->getLocationDataByStatus('0','id,name,address,tel,contact,open_time,content,is_main');
+        $data=session('bisAccount','','bis');
+
+        $locationData=model('BisLocation')->getLocationDataByBisId($data->bis_id,'id,name,address,tel,contact,open_time,content,is_main');
         return $this->fetch('',['locationData'=>$locationData]);
     }
 }
