@@ -24,7 +24,12 @@ class City extends Model{
 		
 		return $this->field($field)->where($data)->order($order)->select();
 	}
-
+    public function getSeCitys(){
+	    $data=[
+	        'parent_id'=>['neq','-1'],
+        ];
+        return $this->field('id,name')->where($data)->select();
+    }
     public function getCityById($id=0,$field=''){
         $data=[
             'status'=>1,
