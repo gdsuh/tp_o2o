@@ -9,6 +9,7 @@ class BaseModel extends Model{
 		$this->save($data);
 		return $this->id;
 	}
+
 }
 
 

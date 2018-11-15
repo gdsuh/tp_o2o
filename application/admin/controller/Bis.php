@@ -3,7 +3,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 
-class Bis extends Controller{
+class Bis extends BaseController{
 	private $obj;
 	public function _initialize(){
 		$this->obj=model("Bis");
@@ -39,26 +39,8 @@ class Bis extends Controller{
             'se_categorys'=>$se_categorys,
         ]);
     }
-	public  function status(){
-	    //先获取参数
-        $data = input('param.');
 
-        //验证数据
-        $validate = validate('Bis');
-        if(!$validate->scene('status')->check($data)){
-            $this->error($validate->getError());
-        }else{
-            //将数据提交到model层,让model层负责实际提交
-            $res=$this->obj->save(['status'=>$data['status']],['id'=>$data['id']]);
 
-            if($res){
-                $this->success("修改成功");
-            }else{
-                print($this->obj->getLastSql());
-
-            }
-        }
-    }
 }
 
 
